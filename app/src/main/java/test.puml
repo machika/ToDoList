@@ -1,0 +1,55 @@
+@startuml
+
+title Sequence for job Issued from UI: TMMS for SBTM
+hide footbox
+
+participant UI
+participant "Job Dispatcher" as jobd
+participant "Job Store" as jobs
+participant "Network Service /\n Thread Pool" as ns
+participant "Alarm Manager" as am
+
+note over UI : test
+
+opt : After Decice boot up or service is restarted
+jobd -> jobs : 1. Query unfinished jobs
+activate jobd
+activate jobs
+deactivate jobd
+deactivate jobs
+end
+
+UI -> jobd : 2. Start a Job
+activate UI
+activate jobd
+deactivate UI
+jobd -> jobd : 3. filter job
+create "New Job"
+jobd --> "New Job" : 4. Create job
+
+jobd -> jobs : 5. Store job
+
+jobd -> ns  : 6. Dispatch job
+deactivate jobd
+activate ns
+ns -> ns : 7. Run job
+
+alt On Success
+  ns -> jobs : 8. Remove job
+  activate jobs
+  deactivate jobs
+
+  ns -> jobd : Broadcast result
+  activate jobd
+  deactivate jobd
+
+else  Unrecoverable Error
+ deactivate ns
+  ns -> am : 10. Schedule job with backoff
+  activate ns
+  activate am
+  deactivate ns
+  deactivate am
+end
+
+@enduml

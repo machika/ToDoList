@@ -1,0 +1,42 @@
+@startuml
+
+
+interface Runnable {
+ +run()
+}
+
+class NetworkBaseJob {
+ +run()
+}
+
+class HTTPGetJob {
+}
+
+class HTTPPostJob {
++genRequestString()
++processResponseBody()
+}
+
+class ConcreteHTTPGetJob {
+}
+
+class ConcreteHTTPPostJob {
++genRequestString()
++processResponseBody()
+}
+
+class HTTPJobExecutor {
++execute()
+}
+
+NetworkBaseJob -up-|> Runnable
+
+HTTPGetJob -up-|> NetworkBaseJob
+HTTPPostJob -up-|> NetworkBaseJob
+ConcreteHTTPGetJob -up-|> HTTPGetJob
+ConcreteHTTPPostJob -up-|> HTTPPostJob
+
+HTTPGetJob .right..> HTTPJobExecutor : <<uses>>
+HTTPPostJob .right..> HTTPJobExecutor : <<uses>>
+
+@enduml

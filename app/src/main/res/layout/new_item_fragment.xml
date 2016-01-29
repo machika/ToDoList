@@ -1,0 +1,9 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="com.example.mmase.todolist.NewItemFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText android:id="@+id/myEditText" android:layout_width="match_parent" android:layout_height="wrap_content" android:singleLine="true"
+        android:text="" />
+
+</FrameLayout>
